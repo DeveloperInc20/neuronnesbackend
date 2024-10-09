@@ -183,6 +183,20 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $post = Post::findOrFail($id);
+            if($post->delete()){
+            return response()->json([
+                'message' => 'Suppression du post éffectuée avec succès',
+                'post' => $post->title,
+            ], 201);
+            }
+        }catch (\Exception $e) {
+            // Retourner une réponse JSON avec un message d'erreur en cas d'exception
+            return response()->json([
+                'message' => "Une erreur est survenue lors de cette opération, veuillez réessayer.",
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

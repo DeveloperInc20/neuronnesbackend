@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // AUTHENTIFICATION PREFIX 
 Route::prefix('auth')->group(function () {
     // création de compte
-    Route::post('/register',[App\Http\Controllers\Auth\RegisterController::class,"register"]);
+    Route::post('/register',[App\Http\Controllers\AuthController::class,"register"]);
     // connexion au compte
     Route::post('/login',[App\Http\Controllers\Auth\LoginController::class,"login"]);
     // déconnexion au compte

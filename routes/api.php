@@ -23,9 +23,9 @@ Route::prefix('auth')->group(function () {
     // création de compte
     Route::post('/register',[App\Http\Controllers\AuthController::class,"register"]);
     // connexion au compte
-    Route::post('/login',[App\Http\Controllers\Auth\LoginController::class,"login"]);
+    Route::post('/login',[App\Http\Controllers\AuthController::class,"login"]);
     // déconnexion au compte
-    Route::delete('/logout',[App\Http\Controllers\Auth\LoginController::class,"logout"]);
+    Route::delete('/logout',[App\Http\Controllers\AuthController::class,"logout"]);
 });
 // création des posts
 Route::post('/posts',[App\Http\Controllers\PostController::class,"store"]);

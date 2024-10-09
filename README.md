@@ -2,7 +2,13 @@
 
 **ETAPE 1: Création des migrations: users, posts**
 
-**ETAPE 2:**
+**ETAPE 2: Installation du package JWT:**
+CAS DU PACKAGE (tymon/jwt-auth)
+$composer require tymon/jwt-auth
+
+JWT pour authentification des utilisateurs par token (Gestion de la sécurité des routes) pour accéder aux ressources.
+
+**ETAPE 3:**
 - Création de routes API AUTH : login, register, logout (POST METHOD)
 - Création de routes API POST: 
 a- Création de post, 
@@ -12,8 +18,9 @@ c- detail d’un post du user connecté (à partir du slug)
 d- mise à jour d’un post du user connecté
 e- supprimer d’un post qui appartient au user connecté
 
-**ETAPE 3:**
+**ETAPE 4:**
 - création de la methode creation du profil
 
-**ETAPE 4:**
+**ETAPE 5:**
 - création d'un post
+- liste des posts du user connecté 

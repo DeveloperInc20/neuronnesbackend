@@ -30,9 +30,9 @@ class AuthController extends Controller
     {
         try {
             // Vérifier si un fichier image a été envoyé
-            if ($request->hasFile('picture_file')) {
+            if ($request->hasFile('image_url')) {
                 // Déplacer le fichier vers le dossier de stockage
-                $picturePath = $request->file('picture_file')->store('profile_pictures', 'public');
+                $picturePath = $request->file('image_url')->store('profile_pictures', 'public');
                 // Ajouter le chemin de l'image à la requête
                 $request->merge(['picture_path' => $picturePath]);
             }
@@ -48,7 +48,6 @@ class AuthController extends Controller
                 // Retourner une réponse JSON avec un message d'erreur et les données de l'utilisateur..
                 return response()->json([
                     'message' => "Erreur lors de l'enregistrement de l'utilisateur",
-                    'user' => $user,
                 ], 500);
             }
         } catch (\Exception $e) {

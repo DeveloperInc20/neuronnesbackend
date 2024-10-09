@@ -17,8 +17,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    // Ajouté pour permettre l'assignation de masse
     protected $fillable = [
-        'first_name',// Ajouté pour permettre l'assignation de masse
+        'first_name',
         'last_name',
         'email',
         'age',

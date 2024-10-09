@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -27,7 +29,45 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            // Vérifier si un fichier image a été envoyé
+            if ($request->hasFile('image_url')) {
+                // Déplacer le fichier vers le dossier de stockage
+                $imagePath = $request->file('image_url')->store('post_images', 'public');
+                // Vérifier si le fichier a été correctement déplacé
+                if ($imagePath) {
+                    // Ajouter le chemin de l'image à la requête
+                    $request->merge(['image_path' => $imagePath]);
+                } else {
+                    // Gérer l'erreur si le fichier n'a pas pu être déplacé
+                    throw new \Exception("Erreur lors du déplacement de l'image.");
+                }
+            }
+            // Création su slud à partir du title
+            $slug = Str::slug($request->title);
+            $request->merge(['slug' => $slug]);
+            
+            // Créer un nouveau post
+            $post = Post::create($request->all());
+            if ($post) {
+                // Retourner une réponse JSON avec un message de succès et les données du post..
+                return response()->json([
+                    'message' => 'Post enregistré avec succès',
+                    'post' => $post,
+                ], 201);
+            }else{
+                // Retourner une réponse JSON avec un message d'erreur en cas d'exception..
+                return response()->json([
+                    'message' => "Oups une erreur est survenue lors de cette opération, veuillez réessayer svp.",
+                ], 500);
+            }
+        }catch (\Exception $e) {
+            // Retourner une réponse JSON avec un message d'erreur en cas d'exception..
+            return response()->json([
+                'message' => "Oups une erreur est survenue lors de cette opération, veuillez réessayer svp.",
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

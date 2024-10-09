@@ -14,6 +14,7 @@ class PostController extends Controller
     public function index()
     {
         try{
+            // recuperation de tous les posts par ordre decroissant
             $posts = Post::orderBy('last_update', 'desc')
             ->get();
             return response()->json([
@@ -89,7 +90,20 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try{
+            // recuperation du post par id
+            $post = Post::findOrFail($id);
+            return response()->json([
+                'message' => 'Recherche du post par id',
+                'post' => $post,
+            ], 201);
+        }catch (\Exception $e) {
+            // Retourner une réponse JSON avec un message d'erreur en cas d'exception..
+            return response()->json([
+                'message' => "Oups une erreur est survenue lors de cette opération, veuillez réessayer svp.",
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function show_slug(string $slug)

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    public $timestamps = false;
     use HasFactory;
     // Ajouté pour permettre l'assignation de masse
     protected $fillable = [
@@ -17,4 +18,5 @@ class Post extends Model
         'created_at',
         'last_update',
     ];
+    
 }

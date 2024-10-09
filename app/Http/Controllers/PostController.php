@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -138,7 +139,43 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $post = Post::findOrFail($id);
+            //dd($request->title);
+            // Check if title exists in the request
+            if ($request->has('title')) {
+                // Update the slug based on the new title
+                $post->slug = \Illuminate\Support\Str::slug($request->title);
+            }
+            if ($request->hasFile('image_url')) {
+                // Supprimer l'ancienne image si elle existe
+                if ($post->image_path) {
+                    Storage::disk('public')->delete($post->image_path);
+                }
+                // Déplacer le fichier vers le dossier de stockage
+                $imagePath = $request->file('image_url')->store('post_images', 'public');
+                // Vérifier si le fichier a été correctement déplacé
+                if ($imagePath) {
+                    // Ajouter le chemin de l'image à la requête
+                    $request->merge(['image_path' => $imagePath]);
+                } else {
+                    // Gérer l'erreur si le fichier n'a pas pu être déplacé 
+                    throw new \Exception("Erreur lors du déplacement de l'image.");
+                }
+            }
+            // Update the post with the new data
+            $post->update($request->all());
+            return response()->json([
+                'message' => 'Mise à jour du post effectuée avec succès',
+                'post' => $post,
+            ], 200);
+        } catch (\Exception $e) {
+            // Retourner une réponse JSON avec un message d'erreur en cas d'exception
+            return response()->json([
+                'message' => "Une erreur est survenue lors de cette opération, veuillez réessayer.",
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

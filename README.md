@@ -30,3 +30,4 @@ e- supprimer d’un post qui appartient au user connecté
 - liste des posts du user connecté 
 - récuperation du post par ID du user connecté 
 - récuperation du post par SLUG du user connecté 
+- mise à jour d’un post du user connecté

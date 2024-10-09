@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('image_path')->nullable();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
+            $table->timestamp('last_update')->useCurrentOnUpdate()->nullable();
         });
     }
 

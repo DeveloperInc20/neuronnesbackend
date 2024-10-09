@@ -13,7 +13,21 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        try{
+            $posts = Post::orderBy('last_update', 'desc')
+            ->get();
+            return response()->json([
+                'message' => 'Liste de tous les posts',
+                'post' => $posts,
+            ], 201);
+        }catch (\Exception $e) {
+            // Retourner une réponse JSON avec un message d'erreur en cas d'exception..
+            return response()->json([
+                'message' => "Oups une erreur est survenue lors de cette opération, veuillez réessayer svp.",
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+
     }
 
     /**

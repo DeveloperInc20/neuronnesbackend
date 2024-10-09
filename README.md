@@ -6,11 +6,15 @@
 CAS DU PACKAGE (tymon/jwt-auth)
 $composer require tymon/jwt-auth
 
+- Ajouter Dans le header de la requette:
+Accept: "application/json", et Authorization: "Bearer  token_authentification.."
+
 JWT pour authentification des utilisateurs par token (Gestion de la sécurité des routes) pour accéder aux ressources.
 
 **ETAPE 3:**
 - Création de routes API AUTH : login, register, logout (POST METHOD)
 - Création de routes API POST: 
+
 a- Création de post, 
 b-liste des posts, 
 c- detail d’un post du user connecté

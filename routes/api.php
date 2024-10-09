@@ -27,15 +27,19 @@ Route::prefix('auth')->group(function () {
     // déconnexion au compte
     Route::delete('/logout',[App\Http\Controllers\AuthController::class,"logout"]);
 });
-// création des posts
-Route::post('/posts',[App\Http\Controllers\PostController::class,"store"]);
-// liste des posts du user connecté
-Route::get('/posts',[App\Http\Controllers\PostController::class,"index"]);
-//detail d’un post du user connecté (à partir de l’id)
-Route::get('/posts/{id}',[App\Http\Controllers\PostController::class,"show"]);
-//detail d’un post du user connecté (à partir du slug)
-Route::get('/posts/{slug}',[App\Http\Controllers\PostController::class,"show_slug"]);
-//mise à jour d’un post du user connecté
-Route::put('/posts/{id}',[App\Http\Controllers\PostController::class,"update"]);
-//supprimer d’un post qui appartient au user connecté
-Route::delete('/posts/{id}',[App\Http\Controllers\PostController::class,"destroy"]);
+
+// SECURISATION DES ROUTES AVEC JWT
+Route::group(["middleware" => ["auth:api"]], function(){
+    // création des posts
+    Route::post('/posts',[App\Http\Controllers\PostController::class,"store"]);
+    // liste des posts du user connecté
+    Route::get('/posts',[App\Http\Controllers\PostController::class,"index"]);
+    //detail d’un post du user connecté (à partir de l’id)
+    Route::get('/posts/{id}',[App\Http\Controllers\PostController::class,"show"]);
+    //detail d’un post du user connecté (à partir du slug)
+    Route::get('/posts/{slug}',[App\Http\Controllers\PostController::class,"show_slug"]);
+    //mise à jour d’un post du user connecté
+    Route::put('/posts/{id}',[App\Http\Controllers\PostController::class,"update"]);
+    //supprimer d’un post qui appartient au user connecté
+    Route::delete('/posts/{id}',[App\Http\Controllers\PostController::class,"destroy"]);
+});

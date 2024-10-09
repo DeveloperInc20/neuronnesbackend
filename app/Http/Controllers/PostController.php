@@ -12,20 +12,50 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        try{
-            // recuperation de tous les posts par ordre decroissant
-            $posts = Post::orderBy('last_update', 'desc')
-            ->get();
+        try {
+            $query = Post::query();
+
+            // Search
+            if ($request->has('q')) {
+                $searchTerm = $request->q;
+                $query->where(function($q) use ($searchTerm) {
+                    $q->where('title', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('content', 'LIKE', "%{$searchTerm}%");
+                });
+            }
+
+            // Select specific fields
+            if ($request->has('select')) {
+                $fields = explode(',', $request->select);
+                $query->select($fields);
+            }
+
+            // Sorting
+            $allowedSortFields = ['title', 'created_at', 'last_update'];
+            $sortBy = $request->input('sortBy', 'last_update');
+            $order = $request->input('order', 'desc');
+            
+            if (in_array($sortBy, $allowedSortFields)) {
+                $query->orderBy($sortBy, $order);
+            } else {
+                $query->orderBy('last_update', 'desc');
+            }
+
+            // Pagination
+            $limit = $request->input('limit', 10);
+            $skip = $request->input('skip', 0);
+            $posts = $query->skip($skip)->take($limit)->get();
+
             return response()->json([
-                'message' => 'Liste de tous les posts',
-                'post' => $posts,
-            ], 201);
-        }catch (\Exception $e) {
-            // Retourner une réponse JSON avec un message d'erreur en cas d'exception..
+                'message' => 'Liste des posts',
+                'posts' => $posts,
+                'total' => $query->count(),
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => "Oups une erreur est survenue lors de cette opération, veuillez réessayer svp.",
+                'message' => "Une erreur est survenue lors de cette opération, veuillez réessayer.",
                 'error' => $e->getMessage(),
             ], 500);
         }

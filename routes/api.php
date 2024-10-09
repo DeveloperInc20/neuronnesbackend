@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('users')->group(function () {
+    Route::prefix('auth')->group(function () {
+        // CRÉATION DE COMPTE
+        Route::post('/register',[App\Http\Controllers\Auth\RegisterController::class,"register"]);
+        // CONNEXION AU COMPTE
+        Route::post('/login',[App\Http\Controllers\Auth\LoginController::class,"login"]);
+    });
+});

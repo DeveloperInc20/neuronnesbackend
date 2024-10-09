@@ -37,7 +37,7 @@ Route::group(["middleware" => ["auth:api"]], function(){
     //detail d’un post du user connecté (à partir de l’id)
     Route::get('/posts/{id}',[App\Http\Controllers\PostController::class,"show"]);
     //detail d’un post du user connecté (à partir du slug)
-    Route::get('/posts/{slug}',[App\Http\Controllers\PostController::class,"show_slug"]);
+    Route::get('/posts/slug/{slug}',[App\Http\Controllers\PostController::class,"show_slug"]);
     //mise à jour d’un post du user connecté
     Route::put('/posts/{id}',[App\Http\Controllers\PostController::class,"update"]);
     //supprimer d’un post qui appartient au user connecté

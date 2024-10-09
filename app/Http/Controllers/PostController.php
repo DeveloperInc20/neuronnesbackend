@@ -109,6 +109,20 @@ class PostController extends Controller
     public function show_slug(string $slug)
     {
         //
+        try{
+            // recuperation du post par slug
+            $post = Post::where('slug', $slug)->first();
+            return response()->json([
+                'message' => 'Recherche du post par slug',
+                'post' => $post,
+            ], 201);
+        }catch (\Exception $e) {
+            // Retourner une réponse JSON avec un message d'erreur en cas d'exception..
+            return response()->json([
+                'message' => "Oups une erreur est survenue lors de cette opération, veuillez réessayer svp.",
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
